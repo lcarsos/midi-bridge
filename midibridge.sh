@@ -2,7 +2,9 @@
 
 # Look up the names / ports of USB-MIDI and Alesis then connect Alesis > USB-MIDI
 if [ "$1" = "start" ] || [ -z "$1" ]; then
-    usb=$(aconnect -i | sed 's/://' | awk "BEGIN {dev=0;} /client [0-9]+ 'USB2.0-MIDI/ {dev=\$2;} END {print dev;}")
+    # For some reason, the USB MIDI device started showing up as CH345.
+    usb=$(aconnect -i | sed 's/://' | awk "BEGIN {dev=0;} /client [0-9]+ 'CH345/ {dev=\$2;} END {print dev;}")
+    #usb=$(aconnect -i | sed 's/://' | awk "BEGIN {dev=0;} /client [0-9]+ 'USB2.0-MIDI/ {dev=\$2;} END {print dev;}")
     alesis=$(aconnect -i | sed 's/://' | awk "BEGIN {dev=0;} /client [0-9]+ 'Alesis/ {dev=\$2;} END {print dev;}")
     
     if [ "$alesis" -ne "0" ] && [ "$usb" -ne "0" ]; then
